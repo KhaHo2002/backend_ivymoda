@@ -31,6 +31,7 @@ let handleCreateProduct = async (req, res) => {
 
 let handleGetProductDetail = async (req, res) => {
     let id = req.query.id;
+    console.log(req.query, "??");
     try {
         let product = await productService.getProductDetail(id);
         if (product) {
@@ -52,6 +53,7 @@ let handleUpdateProduct = async (req, res) => {
             return res.status(200).json(product)
         }
     } catch (error) {
+        console.error("Error executing query:", error);
         return res.status(500).json({
             errCode: -1,
             message: "Internal Server Error",
@@ -60,6 +62,7 @@ let handleUpdateProduct = async (req, res) => {
 }
 
 let handleDeleteProduct = async (req, res) => {
+    console.log(req, ">>");
     let id = req.query.id;
     try {
         let product = await productService.deteleProduct(id);

@@ -10,7 +10,7 @@ const initApiProduct = (app) => {
     router.delete('/delete-product', apiControllerPro.handleDeleteProduct);
     router.post('/search-product', apiControllerPro.handleSearchProduct);
     router.post('/filter-product', apiControllerPro.handleFilterProduct);
-    router.post('/filter-and-search-product',apiControllerPro.handleFilterAndSearchProduct)
+    router.post('/filter-and-search-product',apiControllerPro.handleFilterAndSearchProduct);
     // router.post('api/upload',ApiController.upload);
 
 

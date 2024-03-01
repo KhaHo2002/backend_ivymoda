@@ -30,15 +30,16 @@ let createProduct = (data) => {
                 `INSERT INTO product (name_pro, type_pro_sex, image_pro,price,sale,quantity,desprohtml,status_pro,color,size)
                 VALUES (?,?,?,?,?,?,?,?,?,?)`, [name_pro, type_pro_sex, image_pro, price, sale, quantity, desprohtml, status_pro, color, size]
             );
-            if (!rows) {
-                resolve({
-                    errCode: 1,
-                    message: "Not found",
-                });
-            } else {
+            if (rows) {
                 resolve({
                     errCode: 0,
                     message: "ok"
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "Not found",
+
                 });
             }
         } catch (error) {
@@ -75,20 +76,22 @@ let updateProduct = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (data) {
-                let { id, name_pro, type_pro_sex, image_pro, price, sale, quantity, desprohtml, status_pro, color, size } = data;
+                let { idpro, name_pro, type_pro_sex, image_pro, price, sale, quantity, desprohtml, status_pro, color, size } = data.data;
                 const [rows, fields] = await connection.query(
                     `UPDATE product SET name_pro = ?, type_pro_sex = ?, image_pro = ?, price = ?, sale = ?, quantity = ?, desprohtml = ?, status_pro = ?, color = ?, size = ? WHERE idpro = ?`,
-                    [name_pro, type_pro_sex, image_pro, price, sale, quantity, desprohtml, status_pro, color, size, id]
+                    [name_pro, type_pro_sex, image_pro, price, sale, quantity, desprohtml, status_pro, color, size, idpro]
                 );
-                if (!rows) {
+                if (rows) {
+                    console.log(rows);
                     resolve({
-                        errCode: 1,
-                        message: "Not found",
+                        errCode: 0,
+                        message: "Product updated successfully"
+
                     });
                 } else {
                     resolve({
-                        errCode: 0,
-                        message: "ok"
+                        errCode: 1,
+                        message: "Product not found or no changes were made",
                     });
                 }
             }
@@ -97,6 +100,7 @@ let updateProduct = (data) => {
         }
     })
 }
+
 
 let deteleProduct = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -237,7 +241,7 @@ let filterAndSearchProduct = (data) => {
             if (data) {
                 let listSize = data.size;
                 let listColor = data.color;
-                let titleSearch = `name_pro LIKE '%${data.titleSearch}%'` ;
+                let titleSearch = `name_pro LIKE '%${data.titleSearch}%'`;
 
                 const sizeConditions = listSize.map(size => `size LIKE '%${size}%'`);
                 const sizePattern = sizeConditions.join(' OR ');
