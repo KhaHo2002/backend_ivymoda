@@ -1,3 +1,4 @@
+import { resolve } from "app-root-path";
 import connection from "../config/connectDB";
 
 let getAllCustomer = () => {
@@ -10,7 +11,6 @@ let getAllCustomer = () => {
                     message: "Not found",
                 });
             } else {
-                console.log(rows);
                 resolve({
                     errCode: 0,
                     message: "ok",
@@ -23,14 +23,10 @@ let getAllCustomer = () => {
     })
 }
 
-let createCustomer = (data) => {
+let countCustomer = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let { first_name, last_name, email, numberphone, date_of_day, set, address, name_login, password } = data
-            const [rows, fields] = await connection.query(
-                `INSERT INTO customer (first_name, address_c, set_c,email,number_phone,password_c,date_of_day,last_name,name_account)
-                VALUES (?,?,?,?,?,?,?,?,?)`, [first_name, address, set, email, numberphone, password, date_of_day, last_name, name_login]
-            );
+            const [rows, fields] = await connection.query('SELECT COUNT(*) FROM customer');
             if (!rows) {
                 resolve({
                     errCode: 1,
@@ -39,7 +35,8 @@ let createCustomer = (data) => {
             } else {
                 resolve({
                     errCode: 0,
-                    message: "ok"
+                    message: "ok",
+                    data: rows[0]['COUNT(*)']
                 });
             }
         } catch (error) {
@@ -48,6 +45,47 @@ let createCustomer = (data) => {
     })
 }
 
+let createCustomer = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let { first_name, last_name, email, numberphone, date_of_day, set, address, name_login, password } = data;
+
+            const [checkCustomer, fieldsCheckCustomer] = await connection.query(
+                `select count(*) from customer where  email = ? or name_account=?`, [email, name_login]
+            );
+            console.log(first_name, email, name_login);
+            let resultCheckCustomer = (checkCustomer[0]['count(*)']);
+            console.log(checkCustomer, "??");
+            if (resultCheckCustomer == 0) {
+                const [insertCustomer, fields2] = await connection.query(
+                    `INSERT INTO customer (first_name, address_c, set_c,email,number_phone,password_c,date_of_day,last_name,name_account)
+                VALUES (?,?,?,?,?,?,?,?,?)`, [first_name, address, set, email, numberphone, password, date_of_day, last_name, name_login]
+                );
+                if (!insertCustomer) {
+                    resolve({
+                        errCode: 1,
+                        message: "Can't create account",
+                    });
+                } else {
+                    resolve({
+                        errCode: 0,
+                        message: "ok"
+                    });
+                }
+            }
+            else {
+                resolve({
+                    errCode: 2,
+                    message: "Duplicated account Customer"
+                });
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 module.exports = {
-    getAllCustomer, createCustomer
+    getAllCustomer, createCustomer, countCustomer
 }

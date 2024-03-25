@@ -1,5 +1,6 @@
 
 import productService from '../services/productService'
+import customerService from '../services/customerService';
 let handleGetAllPro = async (req, res) => {
     try {
         let product = await productService.getAllProduct();
@@ -124,7 +125,22 @@ let handleFilterAndSearchProduct = async (req, res) => {
     }
 }
 
+let handleCountCustomer = async (req, res) => {
+    try {
+        let product = await customerService.countCustomer();
+        if (product) {
+            return res.status(200).json(product);
+        }
+    } catch (error) {
+        console.error("Error executing query:", error);
+        return res.status(500).json({
+            errCode: -1,
+            message: "Internal Server Error",
+        });
+    }
+}
+
 module.exports = {
     handleGetAllPro, handleCreateProduct, handleGetProductDetail, handleUpdateProduct, handleDeleteProduct,
-    handleSearchProduct, handleFilterProduct, handleFilterAndSearchProduct
+    handleSearchProduct, handleFilterProduct, handleFilterAndSearchProduct, handleCountCustomer
 }

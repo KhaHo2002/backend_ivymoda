@@ -1,16 +1,19 @@
 import express from "express";
 import apiControllerPro from '../controllers/apiControllerProduct';
-let router = express.Router();
+import { checkUserJWT } from '../middleware/checkJWT';
+const router = express.Router();
 
-const initApiProduct = (app) => {
+const initApiProductAdmin = (app) => {
+    router.all('*', checkUserJWT);
     router.get('/get-all-pro', apiControllerPro.handleGetAllPro);
+    router.get('/count-customer', apiControllerPro.handleCountCustomer);
     router.post('/create-pro', apiControllerPro.handleCreateProduct);
     router.get('/get-product-detail', apiControllerPro.handleGetProductDetail)
     router.put('/update-product', apiControllerPro.handleUpdateProduct);
     router.delete('/delete-product', apiControllerPro.handleDeleteProduct);
     router.post('/search-product', apiControllerPro.handleSearchProduct);
     router.post('/filter-product', apiControllerPro.handleFilterProduct);
-    router.post('/filter-and-search-product',apiControllerPro.handleFilterAndSearchProduct);
+    router.post('/filter-and-search-product', apiControllerPro.handleFilterAndSearchProduct);
     // router.post('api/upload',ApiController.upload);
 
 
@@ -19,4 +22,4 @@ const initApiProduct = (app) => {
 
 // module.exports = initRoute;
 
-export default initApiProduct;
+export default initApiProductAdmin;

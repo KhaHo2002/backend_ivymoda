@@ -5,9 +5,10 @@ import bodyParser from "body-parser";
 // import connection from "./config/connectdb";
 import cors from 'cors';
 import initApi from './router/apiManager';
-import initApiCustomer from './router/apiCustomer';
 import initApiSizeColor from './router/apiSizeAndColor';
-import initApiProduct from './router/apiProduct';
+import initApiProductAdmin from './router/apiProductAdmin';
+import initApiCustomer from './router/apiCustomer';
+import initApiProductClien from "./router/apiProductClient";
 import initApiImageCloud from './router/apiImageCloud';
 import initApiJWT from "./router/apiJWT";
 var morgan = require('morgan');
@@ -20,7 +21,7 @@ app.use(cors({
   credentials: true,
 }));
 const port = process.env.PORT || 8080;
-app.use(express.json({ limit: '10mb' })); 
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 //write middleware
 app.use((req, res, next) => {
@@ -44,9 +45,10 @@ initRoute(app);
 initApi(app);
 initApiCustomer(app);
 initApiSizeColor(app);
-initApiProduct(app);
-initApiImageCloud(app);
+initApiProductClien(app);
 initApiJWT(app);
+initApiProductAdmin(app);
+initApiImageCloud(app);
 
 //handle 404 not found
 app.use((req, res) => {

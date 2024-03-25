@@ -5,9 +5,9 @@ import connection from "../config/connectDB";
 let createJWTCustomer = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let { name_c, password_c } = data;
+            let { name_account, password } = data;
             const [rows, fields] = await connection.query(
-                `SELECT * FROM customer where name_c = ? and password_c=?`, [name_c, password_c]
+                `SELECT * FROM customer where name_account = ? and password_c=?`, [name_account, password]
             );
             if (rows.length <= 0) {
                 resolve({
@@ -17,15 +17,15 @@ let createJWTCustomer = (data) => {
             }
             else {
                 const payload = {
-                    name_c: name_c,
-                    password_c: password_c,
+                    name_account: name_account,
+                    password: password,
                 };
                 let secretKey = crypto.randomUUID();
-                const token = jwt.sign(payload, secretKey, { expiresIn: '1m' });
+                const token = jwt.sign(payload, secretKey, { expiresIn: '10m' });
 
                 resolve({
                     errCode: 0,
-                    message: "ok",
+                    message: "Token customer created",
                     data: token
                 });
             }
@@ -58,7 +58,7 @@ let createJWTManager = (data) => {
 
                 resolve({
                     errCode: 0,
-                    message: "ok",
+                    message: "Token created",
                     data: token
                 });
             }
@@ -67,5 +67,7 @@ let createJWTManager = (data) => {
         }
     })
 }
+
+
 
 module.exports = { createJWTCustomer, createJWTManager }
