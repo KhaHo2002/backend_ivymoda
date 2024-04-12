@@ -53,9 +53,7 @@ let createCustomer = (data) => {
             const [checkCustomer, fieldsCheckCustomer] = await connection.query(
                 `select count(*) from customer where  email = ? or name_account=?`, [email, name_login]
             );
-            console.log(first_name, email, name_login);
             let resultCheckCustomer = (checkCustomer[0]['count(*)']);
-            console.log(checkCustomer, "??");
             if (resultCheckCustomer == 0) {
                 const [insertCustomer, fields2] = await connection.query(
                     `INSERT INTO customer (first_name, address_c, set_c,email,number_phone,password_c,date_of_day,last_name,name_account)

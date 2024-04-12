@@ -8,6 +8,7 @@ import initApi from './router/apiManager';
 import initApiSizeColor from './router/apiSizeAndColor';
 import initApiProductAdmin from './router/apiProductAdmin';
 import initApiCustomer from './router/apiCustomer';
+import initApiOrderCustomer from "./router/apiOrderCustommer";
 import initApiProductClien from "./router/apiProductClient";
 import initApiImageCloud from './router/apiImageCloud';
 import initApiJWT from "./router/apiJWT";
@@ -44,6 +45,7 @@ initRoute(app);
 //init api
 initApi(app);
 initApiCustomer(app);
+initApiOrderCustomer(app);
 initApiSizeColor(app);
 initApiProductClien(app);
 initApiJWT(app);
