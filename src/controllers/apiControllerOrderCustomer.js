@@ -16,7 +16,23 @@ let handleAddOrderCustomer = async (req, res) => {
     }
 }
 
+let handleGetAllOrderCustomer = async (req, res) => {
+    try {
+        let orderCustomert = await orderCustomerService.getAllOrderCustomer();
+        if (orderCustomert) {
+            return res.status(200).json(orderCustomert);
+        }
+
+    } catch (error) {
+        console.error("Error executing query:", error);
+        return res.status(500).json({
+            errCode: -1,
+            message: "Internal Server Error",
+        });
+    }
+}
 
 module.exports = {
     handleAddOrderCustomer,
+    handleGetAllOrderCustomer
 }
